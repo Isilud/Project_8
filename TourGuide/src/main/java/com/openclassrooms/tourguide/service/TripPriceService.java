@@ -13,11 +13,12 @@ import tripPricer.TripPricer;
 @Service
 public class TripPriceService {
 	private static final String TRIP_PRICER_API_KEY = "defaultAPIKEY";
-	private final TripPricer tripPricer = new TripPricer();
+	private final TripPricer tripPricer;
 	private final UserRepository userRepository;
 
-	public TripPriceService(UserRepository userRepository) {
+	public TripPriceService(UserRepository userRepository, TripPricer tripPricer) {
 		this.userRepository = userRepository;
+		this.tripPricer = tripPricer;
 	}
 
 	public List<Provider> getTripDeals(String username) {

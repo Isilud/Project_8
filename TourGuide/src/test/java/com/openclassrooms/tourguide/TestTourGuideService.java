@@ -21,6 +21,7 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
 import tripPricer.Provider;
+import tripPricer.TripPricer;
 
 public class TestTourGuideService {
 
@@ -124,7 +125,7 @@ public class TestTourGuideService {
 		UserRepository userRepository = new InMemoryUserRepository();
 		RewardsService rewardsService = new RewardsService(userRepository, gpsUtil, new RewardCentral());
 		LocationService locationService = new LocationService(gpsUtil, rewardsService, userRepository);
-		TripPriceService tripPriceService = new TripPriceService(userRepository);
+		TripPriceService tripPriceService = new TripPriceService(userRepository, new TripPricer());
 
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 
