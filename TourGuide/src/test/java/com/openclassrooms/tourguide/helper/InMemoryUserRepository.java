@@ -21,29 +21,29 @@ import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import jakarta.annotation.PostConstruct;
 
-public class InMemoryUserRepository implements UserRepository{
-    
+public class InMemoryUserRepository implements UserRepository {
+
 	private final Map<String, User> internalUserMap = new HashMap<>();
 	private final Logger logger = LoggerFactory.getLogger(InMemoryUserRepository.class);
 
-    @Override
-    public User getUser(String userName) {
+	@Override
+	public User getUser(String userName) {
 		return internalUserMap.get(userName);
-    }
+	}
 
-    @Override
-    public List<User> getAllUsers() {
-        return internalUserMap.values().stream().collect(Collectors.toList());
-    }
+	@Override
+	public List<User> getAllUsers() {
+		return internalUserMap.values().stream().collect(Collectors.toList());
+	}
 
-    @Override
-    public void add(User user) {
-        if (!internalUserMap.containsKey(user.getUserName())) {
-            internalUserMap.put(user.getUserName(), user);
-        }
-    }
-    
-    /**********************************************************************************
+	@Override
+	public void add(User user) {
+		if (!internalUserMap.containsKey(user.getUserName())) {
+			internalUserMap.put(user.getUserName(), user);
+		}
+	}
+
+	/**********************************************************************************
 	 * 
 	 * Methods Below: For Internal Testing
 	 * 
@@ -51,7 +51,7 @@ public class InMemoryUserRepository implements UserRepository{
 	// Database connection will be used for external users, but for testing purposes
 	// internal users are provided and stored in memory
 
-    @PostConstruct
+	@PostConstruct
 	public void initializeInternalUsers() {
 		IntStream.range(0, InternalTestHelper.getInternalUserNumber()).forEach(i -> {
 			String userName = "internalUser" + i;
@@ -88,5 +88,5 @@ public class InMemoryUserRepository implements UserRepository{
 		LocalDateTime localDateTime = LocalDateTime.now().minusDays(new Random().nextInt(30));
 		return Date.from(localDateTime.toInstant(ZoneOffset.UTC));
 	}
-	
+
 }
