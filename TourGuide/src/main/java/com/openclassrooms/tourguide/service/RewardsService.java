@@ -2,8 +2,11 @@ package com.openclassrooms.tourguide.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.openclassrooms.tourguide.controller.TourGuideController;
 import com.openclassrooms.tourguide.model.User;
 import com.openclassrooms.tourguide.model.UserReward;
 import com.openclassrooms.tourguide.repository.UserRepository;
@@ -15,6 +18,9 @@ import rewardCentral.RewardCentral;
 
 @Service
 public class RewardsService {
+
+	private final Logger logger = LoggerFactory.getLogger(TourGuideController.class);
+
 	private final UserRepository userRepository;
 	private final GpsUtil gpsUtil;
 	private final RewardCentral rewardsCentral;
@@ -26,6 +32,7 @@ public class RewardsService {
 	}
 
 	public void calculateRewards(User user) {
+		logger.debug("Calculating rewards for " + user.getUserId());
 		List<VisitedLocation> userLocations = user.getVisitedLocations();
 		List<Attraction> attractions = gpsUtil.getAttractions();
 
@@ -40,6 +47,7 @@ public class RewardsService {
 				}
 			}
 		}
+		logger.debug("Rewards calculation for " + user.getUserId() + " is over");
 	}
 
 	private int getRewardPoints(Attraction attraction, User user) {

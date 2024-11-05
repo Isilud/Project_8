@@ -2,6 +2,8 @@ package com.openclassrooms.tourguide.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +19,8 @@ import tripPricer.Provider;
 
 @RestController
 public class TourGuideController {
+
+	private final Logger logger = LoggerFactory.getLogger(TourGuideController.class);
 
     private final TripPriceService tripPriceService;
     private final RewardsService rewardsService;
@@ -36,7 +40,9 @@ public class TourGuideController {
 
     @RequestMapping("/getLocation")
     public VisitedLocation getLocation(@RequestParam String userName) {
-        return locationService.getUserLocation(userName);
+        logger.debug("Fetching location for " + userName);
+        VisitedLocation location = locationService.getUserLocation(userName);
+        return location;
     }
 
     // TODO: Change this method to no longer return a List of Attractions.
@@ -52,17 +58,23 @@ public class TourGuideController {
     // Note: Attraction reward points can be gathered from RewardsCentral
     @RequestMapping("/getNearbyAttractions")
     public List<Attraction> getNearbyAttractions(@RequestParam String userName) {
+        logger.debug("Fetching attractions for " + userName);
         VisitedLocation visitedLocation = locationService.getUserLocation(userName);
-        return locationService.getNearbyAttractions(visitedLocation);
+        List<Attraction> attractionsList = locationService.getNearbyAttractions(visitedLocation);
+        return attractionsList;
     }
 
     @RequestMapping("/getRewards")
     public List<UserReward> getRewards(@RequestParam String userName) {
-        return rewardsService.getUserRewards(userName);
+        logger.debug("Fetching rewards for " + userName);
+        List<UserReward> rewardsList = rewardsService.getUserRewards(userName);
+        return rewardsList;
     }
 
     @RequestMapping("/getTripDeals")
     public List<Provider> getTripDeals(@RequestParam String userName) {
-        return tripPriceService.getTripDeals(userName);
+        logger.debug("Fetching providers for " + userName);
+        List<Provider> providersList = tripPriceService.getTripDeals(userName);
+        return providersList;
     }
 }

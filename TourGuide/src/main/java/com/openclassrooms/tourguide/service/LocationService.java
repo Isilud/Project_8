@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.tourguide.model.User;
@@ -17,6 +19,9 @@ import gpsUtil.location.VisitedLocation;
 
 @Service
 public class LocationService {
+
+	private final Logger logger = LoggerFactory.getLogger(LocationService.class);
+
 
 	private final static double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
 	private final int ATTRACTION_PROXIMITY_RANGE = 200;
@@ -45,26 +50,32 @@ public class LocationService {
 
 	public VisitedLocation trackUserLocation(String username) {
 		User user = userRepository.getUser(username);
+		logger.debug("Tracking " + user.getUserId() + " location.");
 		VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
 		user.addToVisitedLocations(visitedLocation);
 		rewardsService.calculateRewards(user);
+		logger.debug("Returning tracked location for " + user.getUserId() + " : " + visitedLocation.toString());
 		return visitedLocation;
 	}
 
 	public VisitedLocation getUserLocation(String username) {
 		User user = userRepository.getUser(username);
+		logger.debug("Searching latest location for " + user.getUserId());
 		VisitedLocation visitedLocation = (!user.getVisitedLocations().isEmpty()) ? user.getLastVisitedLocation()
 				: trackUserLocation(username);
+        logger.debug("Returning latest location for " + user.getUserId() + " : " + visitedLocation.toString());
 		return visitedLocation;
 	}
 
 	public List<Attraction> getNearbyAttractions(VisitedLocation visitedLocation) {
 		List<Attraction> nearbyAttractions = new ArrayList<>();
+		logger.debug("Calculating nearby attractions for " + visitedLocation.toString());
 		for (Attraction attraction : gpsUtil.getAttractions()) {
 			if (isAttractionUnderProximityRange(attraction, visitedLocation.location)) {
 				nearbyAttractions.add(attraction);
 			}
 		}
+		logger.debug("Nearby attractions for " + visitedLocation.toString() + " : " + nearbyAttractions.toString());
 		return nearbyAttractions;
 	}
 
