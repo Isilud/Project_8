@@ -10,13 +10,18 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mock;
+
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.openclassrooms.tourguide.helper.InMemoryUserRepository;
 import com.openclassrooms.tourguide.model.User;
@@ -29,6 +34,8 @@ import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 
 @ExtendWith(MockitoExtension.class)
+@TestInstance(Lifecycle.PER_CLASS)
+@ActiveProfiles(profiles = "test")
 public class TestLocationService {
 
     @Mock
@@ -56,13 +63,14 @@ public class TestLocationService {
         UUID userId = UUID.randomUUID();
         User user = new User(userId, username, "1234", "default@email");
         VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10.0, 20.0), new Date());
-        
+
         when(gpsUtil.getUserLocation(userId)).thenReturn(visitedLocation);
         when(userRepository.getUser(username)).thenReturn(user);
-        
+        doNothing().when(rewardsService).calculateRewards(any(User.class));
+
         // When
         VisitedLocation result = locationService.trackUserLocation(username);
-        
+
         // Then
         verify(rewardsService).calculateRewards(user);
         verify(userRepository).getUser(username);
@@ -113,12 +121,12 @@ public class TestLocationService {
         VisitedLocation visitedLocation = new VisitedLocation(UUID.randomUUID(), new Location(10.0, 20.0), new Date());
         Attraction nearbyAttraction = new Attraction("Attraction1", "City", "State", 10.1, 20.1);
         Attraction farAttraction = new Attraction("Attraction2", "City", "State", 50.0, 50.0);
-        
+
         when(gpsUtil.getAttractions()).thenReturn(Arrays.asList(nearbyAttraction, farAttraction));
-        
+
         // When
         List<Attraction> result = locationService.getNearbyAttractions(visitedLocation);
-        
+
         // Then
         assertEquals(1, result.size());
         assertTrue(result.contains(nearbyAttraction));

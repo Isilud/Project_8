@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mock;
@@ -16,6 +18,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.openclassrooms.tourguide.model.User;
 import com.openclassrooms.tourguide.model.UserReward;
@@ -29,6 +32,8 @@ import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
 
 @ExtendWith(MockitoExtension.class)
+@TestInstance(Lifecycle.PER_CLASS)
+@ActiveProfiles(profiles = "test")
 public class TestRewardService {
 
     @Mock
@@ -47,7 +52,6 @@ public class TestRewardService {
         rewardsService = new RewardsService(userRepository, gpsUtil, rewardsCentral);
     }
 
-
     @Test
     public void testCalculateRewards_UserWithNoPreviousRewards() {
         // Given
@@ -55,7 +59,7 @@ public class TestRewardService {
         VisitedLocation visitedLocation = new VisitedLocation(user.getUserId(), new Location(10.0, 20.0), new Date());
         user.addToVisitedLocations(visitedLocation);
         Attraction attraction = new Attraction("Attraction1", "City", "State", 10.1, 20.1);
-        
+
         // When
         when(gpsUtil.getAttractions()).thenReturn(Collections.singletonList(attraction));
         when(rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId())).thenReturn(100);
@@ -85,7 +89,7 @@ public class TestRewardService {
         // Then
         rewardsService.calculateRewards(user);
 
-        assertEquals(1, user.getUserRewards().size());  // Should still only have 1 reward
+        assertEquals(1, user.getUserRewards().size()); // Should still only have 1 reward
         verify(rewardsCentral, never()).getAttractionRewardPoints(any(UUID.class), any(UUID.class));
     }
 
