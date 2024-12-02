@@ -3,6 +3,7 @@ package com.openclassrooms.tourguide;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -14,7 +15,6 @@ import com.openclassrooms.tourguide.service.RewardsService;
 
 import gpsUtil.GpsUtil;
 import rewardCentral.RewardCentral;
-
 
 @ActiveProfiles("test")
 public class TestRewardsService {
