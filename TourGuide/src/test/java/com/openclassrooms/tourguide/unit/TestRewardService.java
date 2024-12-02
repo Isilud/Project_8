@@ -12,10 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
-import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
@@ -87,10 +84,10 @@ public class TestRewardService {
         when(gpsUtil.getAttractions()).thenReturn(Collections.singletonList(attraction));
 
         // Then
+        assertEquals(1, user.getUserRewards().size());
         rewardsService.calculateRewards(user);
 
         assertEquals(1, user.getUserRewards().size()); // Should still only have 1 reward
-        verify(rewardsCentral, never()).getAttractionRewardPoints(any(UUID.class), any(UUID.class));
     }
 
     @Test

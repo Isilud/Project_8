@@ -43,6 +43,13 @@ public class InMemoryUserRepository implements UserRepository {
 		}
 	}
 
+	@Override
+	public void delete(User user) {
+		if (!internalUserMap.containsKey(user.getUserName())) {
+			internalUserMap.remove(user.getUserName());
+		}
+	}
+
 	/**********************************************************************************
 	 * 
 	 * Methods Below: For Internal Testing
