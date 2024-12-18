@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
@@ -52,6 +53,16 @@ public class TestTourGuide {
         @MockBean
         private TripPricer tripPricer;
 
+        UUID userUUID;
+
+        @BeforeAll
+        public void setup() {
+                // Set up the user
+                userUUID = UUID.randomUUID();
+                User user = new User(userUUID, "userName", "userNumber", "userEmail");
+                userRepository.add(user);
+        }
+
         @Test
         public void indexTest() throws Exception {
                 mockMvc.perform(get("/"))
@@ -61,9 +72,6 @@ public class TestTourGuide {
 
         @Test
         public void getLocationTest() throws Exception {
-                // Set up the user
-                UUID userUUID = UUID.randomUUID();
-                userRepository.add(new User(userUUID, "userName", "userNumber", "userEmail"));
                 // Mock the response of gpsUtil
                 VisitedLocation mockLocation = new VisitedLocation(userUUID, null, null);
                 Mockito.when(gpsUtil.getUserLocation(userUUID)).thenReturn(mockLocation);
@@ -75,9 +83,6 @@ public class TestTourGuide {
 
         @Test
         public void getNearbyAttractionsTest() throws Exception {
-                // Set up the user
-                UUID userUUID = UUID.randomUUID();
-                userRepository.add(new User(userUUID, "userName", "userNumber", "userEmail"));
                 // Mock the response of gpsUtil
                 Attraction attraction1 = new Attraction("Attraction1", "City1", "State1", 0,
                                 0);

@@ -43,6 +43,13 @@ public class InMemoryUserRepository implements UserRepository {
 		}
 	}
 
+	@Override
+	public void delete(User user) {
+		if (!internalUserMap.containsKey(user.getUserName())) {
+			internalUserMap.remove(user.getUserName());
+		}
+	}
+
 	/**********************************************************************************
 	 * 
 	 * Methods Below: For Internal Testing
@@ -58,7 +65,7 @@ public class InMemoryUserRepository implements UserRepository {
 			String phone = "000";
 			String email = userName + "@tourGuide.com";
 			User user = new User(UUID.randomUUID(), userName, phone, email);
-			generateUserLocationHistory(user);
+			// generateUserLocationHistory(user);
 
 			this.add(user);
 		});

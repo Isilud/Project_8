@@ -15,7 +15,6 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mock;
-
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -23,8 +22,8 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.openclassrooms.tourguide.helper.InMemoryUserRepository;
 import com.openclassrooms.tourguide.model.User;
+import com.openclassrooms.tourguide.repository.UserRepository;
 import com.openclassrooms.tourguide.service.LocationService;
 import com.openclassrooms.tourguide.service.RewardsService;
 
@@ -45,7 +44,7 @@ public class TestLocationService {
     private RewardsService rewardsService;
 
     @Mock
-    private InMemoryUserRepository userRepository;
+    private UserRepository userRepository;
 
     private LocationService locationService;
 

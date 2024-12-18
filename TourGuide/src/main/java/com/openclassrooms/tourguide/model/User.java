@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import gpsUtil.location.VisitedLocation;
 import tripPricer.Provider;
@@ -15,7 +16,7 @@ public class User {
 		this.userName = userName;
 		this.phoneNumber = phoneNumber;
 		this.emailAddress = emailAddress;
-		this.visitedLocations = new ArrayList<>();
+		this.visitedLocations = new CopyOnWriteArrayList<>();
 		this.userRewards = new ArrayList<>();
 		this.userPreferences = new UserPreferences();
 		this.tripDeals = new ArrayList<>();

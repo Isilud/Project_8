@@ -20,7 +20,7 @@ import tripPricer.Provider;
 @RestController
 public class TourGuideController {
 
-	private final Logger logger = LoggerFactory.getLogger(TourGuideController.class);
+    private final Logger logger = LoggerFactory.getLogger(TourGuideController.class);
 
     private final TripPriceService tripPriceService;
     private final RewardsService rewardsService;
@@ -40,7 +40,7 @@ public class TourGuideController {
 
     @RequestMapping("/getLocation")
     public VisitedLocation getLocation(@RequestParam String userName) {
-        logger.debug("Fetching location for " + userName);
+        logger.info("Fetching location for " + userName);
         VisitedLocation location = locationService.getUserLocation(userName);
         return location;
     }
@@ -58,7 +58,7 @@ public class TourGuideController {
     // Note: Attraction reward points can be gathered from RewardsCentral
     @RequestMapping("/getNearbyAttractions")
     public List<Attraction> getNearbyAttractions(@RequestParam String userName) {
-        logger.debug("Fetching attractions for " + userName);
+        logger.info("Fetching attractions for " + userName);
         VisitedLocation visitedLocation = locationService.getUserLocation(userName);
         List<Attraction> attractionsList = locationService.getNearbyAttractions(visitedLocation);
         return attractionsList;
@@ -66,14 +66,14 @@ public class TourGuideController {
 
     @RequestMapping("/getRewards")
     public List<UserReward> getRewards(@RequestParam String userName) {
-        logger.debug("Fetching rewards for " + userName);
+        logger.info("Fetching rewards for " + userName);
         List<UserReward> rewardsList = rewardsService.getUserRewards(userName);
         return rewardsList;
     }
 
     @RequestMapping("/getTripDeals")
     public List<Provider> getTripDeals(@RequestParam String userName) {
-        logger.debug("Fetching providers for " + userName);
+        logger.info("Fetching providers for " + userName);
         List<Provider> providersList = tripPriceService.getTripDeals(userName);
         return providersList;
     }
