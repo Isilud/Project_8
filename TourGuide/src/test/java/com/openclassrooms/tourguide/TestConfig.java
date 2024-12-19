@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.openclassrooms.tourguide.helper.InMemoryUserRepository;
 import com.openclassrooms.tourguide.helper.InternalTestHelper;
+import com.openclassrooms.tourguide.repository.AttractionRepository;
 import com.openclassrooms.tourguide.repository.UserRepository;
 import com.openclassrooms.tourguide.service.LocationService;
 import com.openclassrooms.tourguide.service.RewardsService;
@@ -24,6 +25,11 @@ public class TestConfig {
     }
 
     @Bean
+    AttractionRepository attractionRepository(@Autowired GpsUtil gpsUtil) {
+        return new AttractionRepository(gpsUtil);
+    }
+
+    @Bean
     public LocationService locationService(@Autowired GpsUtil gpsUtil, @Autowired RewardsService rewardsService,
             @Autowired UserRepository userRepository) {
         return new LocationService(gpsUtil, rewardsService, userRepository);
@@ -31,16 +37,16 @@ public class TestConfig {
 
     @Bean
     public GpsUtil gpsUtils() {
-        return new GpsUtil(); 
+        return new GpsUtil();
     }
 
     @Bean
     public TripPricer tripPricer() {
-        return new TripPricer(); 
+        return new TripPricer();
     }
 
     @Bean
     public RewardCentral rewardCentral() {
-        return new RewardCentral(); 
+        return new RewardCentral();
     }
 }
