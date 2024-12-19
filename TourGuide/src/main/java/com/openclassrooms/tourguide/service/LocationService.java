@@ -3,6 +3,10 @@ package com.openclassrooms.tourguide.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +26,6 @@ public class LocationService {
 
 	private final Logger logger = LoggerFactory.getLogger(LocationService.class);
 
-
 	private final static double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
 	private final int ATTRACTION_PROXIMITY_RANGE = 200;
 
@@ -31,6 +34,7 @@ public class LocationService {
 	private final GpsUtil gpsUtil;
 	private final RewardsService rewardsService;
 	private final UserRepository userRepository;
+	private final ExecutorService executorService;
 	public final Tracker tracker;
 
 	public LocationService(GpsUtil gpsUtil, RewardsService rewardsService, UserRepository userRepository) {
@@ -38,6 +42,7 @@ public class LocationService {
 		this.rewardsService = rewardsService;
 		this.userRepository = userRepository;
 		this.tracker = new Tracker(userRepository, this);
+		this.executorService = Executors.newFixedThreadPool(1000);
 		Locale.setDefault(Locale.US);
 		addShutDownHook();
 	}
@@ -46,6 +51,27 @@ public class LocationService {
 			int proximityBuffer) {
 		this(gpsUtil, rewardsService, userRepository);
 		LocationService.proximityBuffer = proximityBuffer;
+	}
+
+	public List<VisitedLocation> trackAllUserLocation() throws InterruptedException, ExecutionException {
+		List<User> allUsers = userRepository.getAllUsers();
+		List<VisitedLocation> locations = new ArrayList<>();
+		List<Future<?>> futures = new ArrayList<>();
+		for (User user : allUsers) {
+			Future<?> future = executorService.submit(() -> {
+				try {
+					VisitedLocation location = trackUserLocation(user.getUserName());
+					locations.add(location);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			});
+			futures.add(future);
+		}
+		for (Future<?> future : futures) {
+			future.get();
+		}
+		return locations;
 	}
 
 	public VisitedLocation trackUserLocation(String username) {
@@ -63,7 +89,7 @@ public class LocationService {
 		logger.debug("Searching latest location for " + user.getUserId());
 		VisitedLocation visitedLocation = (!user.getVisitedLocations().isEmpty()) ? user.getLastVisitedLocation()
 				: trackUserLocation(username);
-        logger.debug("Returning latest location for " + user.getUserId() + " : " + visitedLocation.toString());
+		logger.debug("Returning latest location for " + user.getUserId() + " : " + visitedLocation.toString());
 		return visitedLocation;
 	}
 

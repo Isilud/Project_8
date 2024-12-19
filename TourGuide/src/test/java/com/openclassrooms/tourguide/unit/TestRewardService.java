@@ -19,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.openclassrooms.tourguide.model.User;
 import com.openclassrooms.tourguide.model.UserReward;
+import com.openclassrooms.tourguide.repository.AttractionRepository;
 import com.openclassrooms.tourguide.repository.UserRepository;
 import com.openclassrooms.tourguide.service.RewardsService;
 
@@ -40,13 +41,16 @@ public class TestRewardService {
     private UserRepository userRepository;
 
     @Mock
+    private AttractionRepository attractionRepository;
+
+    @Mock
     private RewardCentral rewardsCentral;
 
     private RewardsService rewardsService;
 
     @BeforeEach
     public void setup() {
-        rewardsService = new RewardsService(userRepository, gpsUtil, rewardsCentral);
+        rewardsService = new RewardsService(userRepository, attractionRepository, rewardsCentral);
     }
 
     @Test
@@ -58,7 +62,7 @@ public class TestRewardService {
         Attraction attraction = new Attraction("Attraction1", "City", "State", 10.1, 20.1);
 
         // When
-        when(gpsUtil.getAttractions()).thenReturn(Collections.singletonList(attraction));
+        when(attractionRepository.getAllAttractions()).thenReturn(Collections.singletonList(attraction));
         when(rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId())).thenReturn(100);
 
         // Then
@@ -81,7 +85,7 @@ public class TestRewardService {
         user.addToVisitedLocations(visitedLocation);
 
         // When
-        when(gpsUtil.getAttractions()).thenReturn(Collections.singletonList(attraction));
+        when(attractionRepository.getAllAttractions()).thenReturn(Collections.singletonList(attraction));
 
         // Then
         assertEquals(1, user.getUserRewards().size());
@@ -100,7 +104,7 @@ public class TestRewardService {
         Attraction distantAttraction = new Attraction("DistantAttraction", "City", "State", 50.0, 50.0);
 
         // When
-        when(gpsUtil.getAttractions()).thenReturn(Collections.singletonList(distantAttraction));
+        when(attractionRepository.getAllAttractions()).thenReturn(Collections.singletonList(distantAttraction));
 
         // Then
         rewardsService.calculateRewards(user);

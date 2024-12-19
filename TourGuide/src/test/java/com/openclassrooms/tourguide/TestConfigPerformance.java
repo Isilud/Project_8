@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.openclassrooms.tourguide.helper.InMemoryUserRepository;
 import com.openclassrooms.tourguide.helper.InternalTestHelper;
+import com.openclassrooms.tourguide.repository.AttractionRepository;
 import com.openclassrooms.tourguide.repository.UserRepository;
 import com.openclassrooms.tourguide.service.LocationService;
 import com.openclassrooms.tourguide.service.RewardsService;
@@ -21,6 +22,11 @@ public class TestConfigPerformance {
     UserRepository userRepository() {
         InternalTestHelper.setInternalUserNumber(100000);
         return new InMemoryUserRepository();
+    }
+
+    @Bean
+    AttractionRepository attractionRepository(@Autowired GpsUtil gpsUtil) {
+        return new AttractionRepository(gpsUtil);
     }
 
     @Bean
