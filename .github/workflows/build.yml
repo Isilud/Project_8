@@ -1,29 +1,29 @@
-name: Java CI Test
+name: Java CI Build
 
 on: workflow_dispatch
 
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 21
+      - name: Setup Java
         uses: actions/setup-java@v3
         with:
-          distribution: "temurin"
           java-version: "21"
+          distribution: "temurin"
 
-      - name: Cache Maven dependencies
+      - name: Setup Maven cache
         uses: actions/cache@v3
         with:
-          path: ~/.m2/repository
+          path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Install dependencies and run tests
+      - name: Build with Maven
         working-directory: ./TourGuide
-        run: mvn clean test
+        run: mvn clean verify
