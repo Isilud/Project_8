@@ -71,7 +71,7 @@ public class TestPerformance {
 
 	@Test
 	public void highVolumeCalculateReward() throws Exception {
-		// Users should be incremented up to 100,000, and test finishes within 15
+		// Users should be incremented up to 100,000, and test finishes within 20
 		// minutes
 
 		StopWatch stopWatch = new StopWatch();
