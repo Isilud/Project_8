@@ -24,6 +24,39 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Build with Maven
+      - name: Clean Workspace
         working-directory: ./TourGuide
-        run: mvn clean verify
+        run: mvn clean
+
+      - name: Compile
+        if: success()
+        working-directory: ./TourGuide
+        run: mvn compile
+
+      - name: Run Tests
+        if: success()
+        working-directory: ./TourGuide
+        run: mvn test
+
+      - name: Build Package
+        if: success()
+        working-directory: ./TourGuide
+        run: mvn package -DskipTests
+
+      - name: Upload artifact
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: TourGuide-JAR
+          path: ./TourGuide/target/*.jar
+
+      - name: Generate JaCoCo Report
+        working-directory: ./TourGuide
+        run: mvn jacoco:report
+
+      - name: Deploy JaCoCo Report to GitHub Pages
+        if: success()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./TourGuide/target/site/jacoco
