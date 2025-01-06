@@ -2,9 +2,9 @@ package com.openclassrooms.tourguide;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -19,13 +19,13 @@ import tripPricer.TripPricer;
 @ContextConfiguration(classes = { TestConfig.class })
 class TourguideApplicationTests {
 
-    @MockBean
+    @Mock
     private GpsUtil gpsUtil;
 
-    @MockBean
+    @Mock
     private RewardCentral rewardCentral;
 
-    @MockBean
+    @Mock
     private TripPricer tripPricer;
 
 	@Test

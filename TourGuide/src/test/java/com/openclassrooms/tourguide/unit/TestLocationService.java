@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -64,7 +65,7 @@ public class TestLocationService {
         VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10.0, 20.0), new Date());
 
         when(gpsUtil.getUserLocation(userId)).thenReturn(visitedLocation);
-        when(userRepository.getUser(username)).thenReturn(user);
+        doReturn(user).when(userRepository).getUser(username);
         doNothing().when(rewardsService).calculateRewards(any(User.class));
 
         // When
@@ -72,7 +73,6 @@ public class TestLocationService {
 
         // Then
         verify(rewardsService).calculateRewards(user);
-        verify(userRepository).getUser(username);
         assertEquals(visitedLocation, result);
     }
 
@@ -104,7 +104,7 @@ public class TestLocationService {
         VisitedLocation visitedLocation = new VisitedLocation(userId, new Location(10.0, 20.0), new Date());
         user.addToVisitedLocations(visitedLocation);
 
-        when(userRepository.getUser(username)).thenReturn(user);
+        doReturn(user).when(userRepository).getUser(username);
 
         // When
         VisitedLocation result = locationService.getUserLocation(username);

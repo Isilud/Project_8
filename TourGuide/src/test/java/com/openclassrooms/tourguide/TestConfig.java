@@ -25,7 +25,7 @@ public class TestConfig {
     }
 
     @Bean
-    AttractionRepository attractionRepository(@Autowired GpsUtil gpsUtil) {
+    public AttractionRepository attractionRepository(@Autowired GpsUtil gpsUtil) {
         return new AttractionRepository(gpsUtil);
     }
 
