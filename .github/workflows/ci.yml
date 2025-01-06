@@ -1,6 +1,7 @@
 name: Java CI Test
 
-on: workflow_dispatch
+on:
+  pull_request:
 
 jobs:
   test:
@@ -24,6 +25,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Install dependencies and run tests
+      - name: Compile and run tests
         working-directory: ./TourGuide
         run: mvn clean test
