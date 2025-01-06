@@ -66,16 +66,16 @@ public class TourGuideController {
 
     @RequestMapping(&quot;/getRewards&quot;)
     public List&lt;UserReward&gt; getRewards(@RequestParam String userName) {
-<span class="nc" id="L69">        logger.info(&quot;Fetching rewards for &quot; + userName);</span>
-<span class="nc" id="L70">        List&lt;UserReward&gt; rewardsList = rewardsService.getUserRewards(userName);</span>
-<span class="nc" id="L71">        return rewardsList;</span>
+<span class="fc" id="L69">        logger.info(&quot;Fetching rewards for &quot; + userName);</span>
+<span class="fc" id="L70">        List&lt;UserReward&gt; rewardsList = rewardsService.getUserRewards(userName);</span>
+<span class="fc" id="L71">        return rewardsList;</span>
     }
 
     @RequestMapping(&quot;/getTripDeals&quot;)
     public List&lt;Provider&gt; getTripDeals(@RequestParam String userName) {
-<span class="nc" id="L76">        logger.info(&quot;Fetching providers for &quot; + userName);</span>
-<span class="nc" id="L77">        List&lt;Provider&gt; providersList = tripPriceService.getTripDeals(userName);</span>
-<span class="nc" id="L78">        return providersList;</span>
+<span class="fc" id="L76">        logger.info(&quot;Fetching providers for &quot; + userName);</span>
+<span class="fc" id="L77">        List&lt;Provider&gt; providersList = tripPriceService.getTripDeals(userName);</span>
+<span class="fc" id="L78">        return providersList;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
