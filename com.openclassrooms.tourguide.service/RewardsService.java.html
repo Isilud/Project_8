@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RewardsService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tourguide</a> &gt; <a href="index.source.html" class="el_package">com.openclassrooms.tourguide.service</a> &gt; <span class="el_source">RewardsService.java</span></div><h1>RewardsService.java</h1><pre class="source lang-java linenums">package com.openclassrooms.tourguide.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.openclassrooms.tourguide.model.User;
+import com.openclassrooms.tourguide.model.UserReward;
+import com.openclassrooms.tourguide.repository.AttractionRepository;
+import com.openclassrooms.tourguide.repository.UserRepository;
+
+import gpsUtil.location.Attraction;
+import gpsUtil.location.VisitedLocation;
+import rewardCentral.RewardCentral;
+
+@Service
+public class RewardsService {
+
+<span class="fc" id="L26">	private final Logger logger = LoggerFactory.getLogger(RewardsService.class);</span>
+
+	private final UserRepository userRepository;
+	private final AttractionRepository attractionRepository;
+	private final RewardCentral rewardsCentral;
+	private final ExecutorService executorService;
+
+	public RewardsService(UserRepository userRepository, AttractionRepository attractionRepository,
+<span class="fc" id="L34">			RewardCentral rewardCentral) {</span>
+<span class="fc" id="L35">		this.attractionRepository = attractionRepository;</span>
+<span class="fc" id="L36">		this.userRepository = userRepository;</span>
+<span class="fc" id="L37">		this.rewardsCentral = rewardCentral;</span>
+<span class="fc" id="L38">		this.executorService = Executors.newFixedThreadPool(1000);</span>
+<span class="fc" id="L39">	}</span>
+
+	public void calculateRewards(User user) {
+<span class="fc" id="L42">		logger.debug(&quot;Calculating rewards for &quot; + user.getUserId());</span>
+<span class="fc" id="L43">		List&lt;VisitedLocation&gt; userLocations = user.getVisitedLocations();</span>
+<span class="fc" id="L44">		List&lt;Attraction&gt; attractions = attractionRepository.getAllAttractions();</span>
+
+<span class="fc bfc" id="L46" title="All 2 branches covered.">		for (VisitedLocation visitedLocation : userLocations) {</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">			for (Attraction attraction : attractions) {</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">				if (LocationService.isAttractionUnderBufferRange(visitedLocation, attraction)) {</span>
+<span class="fc" id="L49">					user.addUserReward(</span>
+<span class="fc" id="L50">							new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));</span>
+				}
+<span class="fc" id="L52">			}</span>
+<span class="fc" id="L53">		}</span>
+<span class="fc" id="L54">		logger.debug(&quot;Rewards calculation for &quot; + user.getUserId() + &quot; is over&quot;);</span>
+<span class="fc" id="L55">	}</span>
+
+	public void calculateAllUsersRewards() throws InterruptedException, ExecutionException {
+<span class="fc" id="L58">		List&lt;User&gt; allUsers = userRepository.getAllUsers();</span>
+<span class="fc" id="L59">		List&lt;Future&lt;?&gt;&gt; futures = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">		for (User user : allUsers) {</span>
+<span class="fc" id="L61">			Future&lt;?&gt; future = executorService.submit(() -&gt; {</span>
+				try {
+<span class="fc" id="L63">					calculateRewards(user);</span>
+<span class="nc" id="L64">				} catch (Exception e) {</span>
+<span class="nc" id="L65">					throw new RuntimeException(e);</span>
+<span class="fc" id="L66">				}</span>
+<span class="fc" id="L67">			});</span>
+<span class="fc" id="L68">			futures.add(future);</span>
+<span class="fc" id="L69">		}</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">		for (Future&lt;?&gt; future : futures) {</span>
+<span class="fc" id="L71">			future.get();</span>
+<span class="fc" id="L72">		}</span>
+<span class="fc" id="L73">	}</span>
+
+	private int getRewardPoints(Attraction attraction, User user) {
+<span class="fc" id="L76">		return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());</span>
+	}
+
+	public List&lt;UserReward&gt; getUserRewards(String username) {
+<span class="fc" id="L80">		return userRepository.getUser(username).getUserRewards();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
