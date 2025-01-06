@@ -45,37 +45,26 @@ public class TourGuideController {
 <span class="fc" id="L45">        return location;</span>
     }
 
-    // TODO: Change this method to no longer return a List of Attractions.
-    // Instead: Get the closest five tourist attractions to the user - no matter how
-    // far away they are.
-    // Return a new JSON object that contains:
-    // Name of Tourist attraction,
-    // Tourist attractions lat/long,
-    // The user's location lat/long,
-    // The distance in miles between the user's location and each of the
-    // attractions.
-    // The reward points for visiting each Attraction.
-    // Note: Attraction reward points can be gathered from RewardsCentral
     @RequestMapping(&quot;/getNearbyAttractions&quot;)
     public List&lt;Attraction&gt; getNearbyAttractions(@RequestParam String userName) {
-<span class="fc" id="L61">        logger.info(&quot;Fetching attractions for &quot; + userName);</span>
-<span class="fc" id="L62">        VisitedLocation visitedLocation = locationService.getUserLocation(userName);</span>
-<span class="fc" id="L63">        List&lt;Attraction&gt; attractionsList = locationService.getNearbyAttractions(visitedLocation);</span>
-<span class="fc" id="L64">        return attractionsList;</span>
+<span class="fc" id="L50">        logger.info(&quot;Fetching attractions for &quot; + userName);</span>
+<span class="fc" id="L51">        VisitedLocation visitedLocation = locationService.getUserLocation(userName);</span>
+<span class="fc" id="L52">        List&lt;Attraction&gt; attractionsList = locationService.getNearbyAttractions(visitedLocation);</span>
+<span class="fc" id="L53">        return attractionsList;</span>
     }
 
     @RequestMapping(&quot;/getRewards&quot;)
     public List&lt;UserReward&gt; getRewards(@RequestParam String userName) {
-<span class="fc" id="L69">        logger.info(&quot;Fetching rewards for &quot; + userName);</span>
-<span class="fc" id="L70">        List&lt;UserReward&gt; rewardsList = rewardsService.getUserRewards(userName);</span>
-<span class="fc" id="L71">        return rewardsList;</span>
+<span class="fc" id="L58">        logger.info(&quot;Fetching rewards for &quot; + userName);</span>
+<span class="fc" id="L59">        List&lt;UserReward&gt; rewardsList = rewardsService.getUserRewards(userName);</span>
+<span class="fc" id="L60">        return rewardsList;</span>
     }
 
     @RequestMapping(&quot;/getTripDeals&quot;)
     public List&lt;Provider&gt; getTripDeals(@RequestParam String userName) {
-<span class="fc" id="L76">        logger.info(&quot;Fetching providers for &quot; + userName);</span>
-<span class="fc" id="L77">        List&lt;Provider&gt; providersList = tripPriceService.getTripDeals(userName);</span>
-<span class="fc" id="L78">        return providersList;</span>
+<span class="fc" id="L65">        logger.info(&quot;Fetching providers for &quot; + userName);</span>
+<span class="fc" id="L66">        List&lt;Provider&gt; providersList = tripPriceService.getTripDeals(userName);</span>
+<span class="fc" id="L67">        return providersList;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -2,20 +2,22 @@
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 
+@Repository
 public class AttractionRepository {
 
     private final List&lt;Attraction&gt; internalAttractionMap;
 
-<span class="fc" id="L13">    public AttractionRepository(@Autowired GpsUtil gpsUtil) {</span>
-<span class="fc" id="L14">        this.internalAttractionMap = gpsUtil.getAttractions();</span>
-<span class="fc" id="L15">    }</span>
+<span class="fc" id="L15">    public AttractionRepository(@Autowired GpsUtil gpsUtil) {</span>
+<span class="fc" id="L16">        this.internalAttractionMap = gpsUtil.getAttractions();</span>
+<span class="fc" id="L17">    }</span>
 
     public List&lt;Attraction&gt; getAllAttractions() {
-<span class="fc" id="L18">        return internalAttractionMap;</span>
+<span class="fc" id="L20">        return internalAttractionMap;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
