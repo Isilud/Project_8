@@ -126,7 +126,7 @@ public class TestTourGuide {
                                 .andExpect(jsonPath("$[0].attraction.attractionName").value("Attraction1"))
                                 .andExpect(jsonPath("$[1].attraction.attractionName").value("Attraction2"));
         }
-        
+
         @Test
         public void getTripDealsTest() throws Exception {
                 VisitedLocation location1 = new VisitedLocation(userUUID, null, null);
@@ -143,7 +143,8 @@ public class TestTourGuide {
                 Provider provider1 = new Provider(UUID.randomUUID(), "Provider1", 10.);
                 Provider provider2 = new Provider(UUID.randomUUID(), "Provider2", 20.);
                 List<Provider> providers = List.of(provider1, provider2);
-                Mockito.when(tripPricer.getPrice(any(String.class), any(UUID.class), anyInt(), anyInt(), anyInt(), anyInt())).thenReturn(providers);
+                Mockito.when(tripPricer.getPrice(any(String.class), any(UUID.class), anyInt(), anyInt(), anyInt(),
+                                anyInt())).thenReturn(providers);
 
                 mockMvc.perform(get("/getTripDeals").param("userName", "userName"))
                                 .andExpect(status().isOk())

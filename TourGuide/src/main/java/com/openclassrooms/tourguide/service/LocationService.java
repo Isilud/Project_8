@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.tourguide.model.User;
@@ -37,6 +38,7 @@ public class LocationService {
 	private final ExecutorService executorService;
 	public final Tracker tracker;
 
+	@Autowired
 	public LocationService(GpsUtil gpsUtil, RewardsService rewardsService, UserRepository userRepository) {
 		this.gpsUtil = gpsUtil;
 		this.rewardsService = rewardsService;

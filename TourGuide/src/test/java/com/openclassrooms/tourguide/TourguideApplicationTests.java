@@ -28,8 +28,8 @@ class TourguideApplicationTests {
     @Mock
     private TripPricer tripPricer;
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
