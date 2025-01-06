@@ -2,6 +2,9 @@ name: Java CI Build
 
 on: workflow_dispatch
 
+permissions:
+  contents: write
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
